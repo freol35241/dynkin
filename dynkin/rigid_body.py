@@ -9,6 +9,14 @@ def skew(arr):
     return np.array([[0,        -arr[2],    arr[1]],
                      [arr[2],   0,          -arr[0]],
                      [-arr[1],  arr[0],     0]])
+    
+def motion_transformation_matrix(position):
+    """
+    Returns motion transformation matrix, H, (6x6)
+    """
+    H = np.eye(6)
+    H[:3, 3:]= skew(position).T
+    return H
 
 class RigidBody(Frame):
     """
@@ -17,11 +25,11 @@ class RigidBody(Frame):
     def __init__(self, mass=None, gyradius=None, cog=None):
         super().__init__()
         
-        assert(mass > 0)
+        assert mass > 0, 'Mass must be greater than zero!'
         self._mass = mass
         
         gyradius = assert_3D_vector(gyradius)
-        assert((gyradius > 0).all())
+        assert (gyradius > 0).all(), 'All gyradii must be greater than zero!'
         self._gyradius = gyradius
         
         self._cog = self.align_child(
@@ -48,14 +56,6 @@ class RigidBody(Frame):
         Reference to Centre of Gravity Frame of this RigidBody
         """
         return self._cog
-    
-    def motion_transformation_matrix(self):
-        """
-        Returns motion transformation matrix, H, (6x6)
-        """
-        H = np.eye(6)
-        H[:3, 3:]= skew(self.CoG.position).T
-        return H
     
     def coriolis_centripetal_matrix(self, inertia, twist):
         """
@@ -102,11 +102,11 @@ class RigidBody(Frame):
         """
         f = assert_6D_vector(wrench)
         twist = self.get_twist()
-        H = self.motion_transformation_matrix()
+        H = motion_transformation_matrix(self.CoG.position)
         I_cg = self.generalized_inertia_matrix()
         C_cg = self.coriolis_centripetal_matrix(I_cg, twist)
-        I_b = H @ I_cg @ H.T
-        C_b = H @ C_cg @ H.T
+        I_b = H.T @ I_cg @ H
+        C_b = H.T @ C_cg @ H
         f_cc = C_b @ twist
         f -= f_cc
         
@@ -118,14 +118,14 @@ class RigidBody(Frame):
         """
         a = assert_6D_vector(acceleration)
         twist = self.get_twist()
-        H = self.motion_transformation_matrix()
+        H = motion_transformation_matrix(self.CoG.position)
         I_cg = self.generalized_inertia_matrix()
         C_cg = self.coriolis_centripetal_matrix(I_cg, twist)
-        I_b = H @ I_cg @ H.T
-        C_b = H @ C_cg @ H.T
+        I_b = H.T @ I_cg @ H
+        C_b = H.T @ C_cg @ H
         f_cc = C_b @ twist
         
         f = I_b @ a
-        f -= f_cc
+        f += f_cc
         
         return f
