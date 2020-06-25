@@ -31,11 +31,6 @@ Some basic notions:
 * A `transform` is an object relating two `Frame`s enabling transformation of `positions`, `vectors`, `velocities` etc from one `Frame` to the other. The `Frame`s do not need to be part of the same `kinematic chain`.
 * A `RigidBody` is a 3D body with arbitrary extent that may be described by a generalized inertia matrix (6x6). It accelerates when exposed to generalized external forces (`wrenches`) and rotational velocities give rise to inertial forces (coriolis and centripetal contributions).
 
-## Example usage
-
-TODO
-
-
 ## License
 
 Distributed under the terms of the MIT license, `dynkin` is free and open source software
