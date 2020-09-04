@@ -1,3 +1,17 @@
+"""
+A toolkit for 3D dynamics and kinematics of rigid bodies using the
+ YPR euler angle convention.
+
+.. include:: ../README.md
+"""
+
+__pdoc__ = {
+    '': False,
+    'euler': False,
+    'frame': False,
+    'rigid_body': False,
+}
+
 import numpy as np
 
 def assert_3D_vector(v):
@@ -28,11 +42,12 @@ def assert_6D_matrix(m):
     return out
 
 
-from .frame import Frame, transform
+from .frame import Frame, Transform, transform
 from .rigid_body import RigidBody
 
 __all__ = [
     'RigidBody',
     'Frame',
+    'Transform',
     'transform'
 ]
