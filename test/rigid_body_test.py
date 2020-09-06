@@ -81,6 +81,13 @@ def test_acceleration_wrench():
         [1, 1, 3, 1, 2, 0]
     )
     
+    # Calculate the required wrench to cahieve this acceleration and compare with initial input
+    f = rb.wrench(a)
+    assert_almost_equal(
+        wrench,
+        f
+    )
+    
 def test_wrench_acceleration():
     rb = RigidBody(mass=1, gyradius=[1, 1, 1])
     a = np.ones(6)
@@ -99,3 +106,12 @@ def test_wrench_acceleration():
         wrench,
         [1, 2, 0, 1, 1, 3]
     )
+    
+    # Making sure it works both ways
+    acc = rb.acceleration(wrench)
+    assert_almost_equal(
+        acc,
+        a
+    )
+    
+    
