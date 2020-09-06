@@ -35,7 +35,75 @@ Some basic notions:
 
 ## Examples
 
-TODO
+### Single frame
+```python
+from dynkin import Frame, transform
+
+frame1 = Frame(position=[1, 2, 3], attitude=[0, 0, 90], degrees=True)
+
+# Find transformation from the inertial frame to frame1
+ti1 = transform(None, frame1)
+
+# Transformation of vector
+v1_decomposed_in_frame1 = ti1.apply_vector(v1_decomposed_in_inertial_frame)
+
+# Transformation of position
+p1_decomposed_in_frame1 = ti1.apply_position(p1_decomposed_in_inertial_frame)
+
+# Transformation of wrench
+w1_decomposed_in_frame1 = ti1.apply_wrench(w1_decomposed_in_inertial_frame)
+
+# Find the inverse transformation
+t1i = ti1.inv()
+
+# Pose of this frame, decomposed in inertial frame
+frame1.get_pose()
+
+# Twist of this frame, decomposed in inertial frame
+frame.get_twist()
+```
+
+### Two frames
+```python
+from dynkin import Frame, transform
+
+frame1 = Frame(position=[1, 2, 3], attitude=[0, 0, 90], degrees=True)
+frame2 = Frame(position=[3, 2, 1], attitude=[0, 0, -90], degrees=True)
+
+# Find transformation from frame1 to frame2
+t12 = transform(frame1, frame2)
+
+# Transformation of vector
+v1_decomposed_in_frame2 = t12.apply_vector(v1_decomposed_in_frame1)
+
+# Transformation of position
+p1_decomposed_in_frame2 = t12.apply_position(p1_decomposed_in_frame1)
+
+# Transformation of wrench
+w1_decomposed_in_frame2 = t12.apply_wrench(w1_decomposed_in_frame1)
+
+# Find the inverse transformation
+t21 = t12.inv()
+```
+
+### Kinematic chains
+```python
+from dynkin import Frame, transform
+
+frame1 = Frame(position=[1, 2, 3], attitude=[0, 0, 90], degrees=True)
+frame2 = frame1.align_child(position=[3, 2, 1], attitude=[0, 0, -90], degrees=True)
+frame3 = frame2.align_child(position=[1, 1, 1], attitude=[0, 0, 0], degrees=True)
+
+# Find transformation from inertial frame to frame3
+ti3 = transform(None, frame3)
+
+# Transformation from frame3 and frame1
+t31 = transform(frame3, frame1)
+
+...
+```
+
+TODO: RigidBody example
 
 ## License
 
