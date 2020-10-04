@@ -5,18 +5,15 @@ from numpy.testing import assert_equal, assert_almost_equal
 from dynkin import RigidBody, Frame
 
 def test_constructor():
-    
-    with pytest.raises(AssertionError):
-        RigidBody(mass=-1)
         
     with pytest.raises(AssertionError):
-        RigidBody(mass=1, gyradius=-1)
+        RigidBody.from_mass_gyradii(mass=1, gyradii=-1)
         
     with pytest.raises(AssertionError):
-        RigidBody(mass=1, gyradius=[-1, 1, 1])
+        RigidBody.from_mass_gyradii(mass=1, gyradii=[-1, 1, 1])
         
 def test_cog():
-    rb = RigidBody(mass=1, gyradius=[1, 1, 1], cog=[-1, 1, 3])
+    rb = RigidBody.from_mass_gyradii(mass=1, gyradii=[1, 1, 1], cog=[-1, 1, 3])
     
     assert_almost_equal(
         [-1, 1, 3],
@@ -24,7 +21,7 @@ def test_cog():
     )
 
 def test_generalized_coordinates():
-    rb = RigidBody(mass=1, gyradius=[1, 1, 1])
+    rb = RigidBody.from_mass_gyradii(mass=1, gyradii=[1, 1, 1])
     rb.set_position([1,2,3])
     rb.set_attitude([0, 1, 1])
     pose = rb.generalized_coordinates()
@@ -34,7 +31,7 @@ def test_generalized_coordinates():
     )
     
 def test_generalized_velocities():
-    rb = RigidBody(mass=1, gyradius=[1, 1, 1])
+    rb = RigidBody.from_mass_gyradii(mass=1, gyradii=[1, 1, 1])
     rb.set_position([1, 1, 1])
     rb.set_attitude([90, 0, 90], degrees=True)
     rb.set_linear_velocity([1, 2, 3])
@@ -46,7 +43,7 @@ def test_generalized_velocities():
     )
 
 def test_coriolis_centripetal_acceleration_cog_offset():
-    rb = RigidBody(mass=1, gyradius=[1,1,1], cog=[1, 0, 0])
+    rb = RigidBody.from_mass_gyradii(mass=1, gyradii=[1,1,1], cog=[1, 0, 0])
     rb.set_angular_velocity([0,0,1])
     assert_equal(
         [1, 0, 0, 0, 0, 0], 
@@ -54,7 +51,7 @@ def test_coriolis_centripetal_acceleration_cog_offset():
     )
     
 def test_coriolis_centripetal_acceleration_linear_velocity():
-    rb = RigidBody(mass=1, gyradius=[1, 1, 1])
+    rb = RigidBody.from_mass_gyradii(mass=1, gyradii=[1, 1, 1])
     rb.set_angular_velocity([0, 0, 1])
     rb.set_linear_velocity([1, 0, 0])
     assert_equal(
@@ -63,7 +60,7 @@ def test_coriolis_centripetal_acceleration_linear_velocity():
     )
     
 def test_acceleration_wrench():
-    rb = RigidBody(mass=1, gyradius=[1, 1, 1])
+    rb = RigidBody.from_mass_gyradii(mass=1, gyradii=[1, 1, 1])
     wrench = np.ones(6)
     a = rb.acceleration(wrench)
     
@@ -72,7 +69,7 @@ def test_acceleration_wrench():
         np.ones(6)
     )
     
-    rb = RigidBody(mass=1, gyradius=[1, 1, 1], cog=[1, 0, 0])
+    rb = RigidBody.from_mass_gyradii(mass=1, gyradii=[1, 1, 1], cog=[1, 0, 0])
     wrench = np.ones(6)
     a = rb.acceleration(wrench)
     
@@ -89,7 +86,7 @@ def test_acceleration_wrench():
     )
     
 def test_wrench_acceleration():
-    rb = RigidBody(mass=1, gyradius=[1, 1, 1])
+    rb = RigidBody.from_mass_gyradii(mass=1, gyradii=[1, 1, 1])
     a = np.ones(6)
     wrench = rb.wrench(a)
     
@@ -98,7 +95,7 @@ def test_wrench_acceleration():
         np.ones(6)
     )
     
-    rb = RigidBody(mass=1, gyradius=[1, 1, 1], cog=[1, 0, 0])
+    rb = RigidBody.from_mass_gyradii(mass=1, gyradii=[1, 1, 1], cog=[1, 0, 0])
     a = np.ones(6)
     wrench = rb.wrench(a)
     
