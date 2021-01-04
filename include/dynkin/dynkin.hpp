@@ -1,5 +1,6 @@
 
 #include <memory>
+#include <experimental/memory>
 #include <Eigen/Dense>
 #include <unsupported/Eigen/EulerAngles>
 
@@ -72,7 +73,7 @@ namespace dynkin {
         Eigen::Isometry3d HTM = Eigen::Isometry3d::Identity();
         Eigen::Vector3d linear_velocity = Eigen::Vector3d::Zero();
         Eigen::Vector3d angular_velocity = Eigen::Vector3d::Zero();
-        std::shared_ptr<Frame> parent = nullptr;
+        std::experimental::observer_ptr<Frame> parent = nullptr;
 
         Frame& set_parent(Frame* parent){
             this->parent.reset(parent);
@@ -132,8 +133,6 @@ namespace dynkin {
             out.tail(3) = w;
             return out;
         }
-
-
 
     };
 
