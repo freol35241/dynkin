@@ -17,25 +17,6 @@ namespace dynkin {
 
     inline Eigen::Vector3d rotation_to_euler(const Eigen::Matrix3d& rotation){
         return rotation.eulerAngles(2,1,0).reverse();
-
-        // double sy = sqrt(
-        //     rotation(0,0)*rotation(0,0) + rotation(1,0)*rotation(1,0)
-        //     );
-        // bool singular = sy < 1e-6;
-        // Eigen::Vector3d out;
-
-        // if (!singular){
-        //     out(0) = atan2(rotation(2,1), rotation(2,2));
-        //     out(1) = atan2(-rotation(2,0), sy);
-        //     out(2) = atan2(rotation(1,0), rotation(0,0));
-        // } 
-        // else {
-        //     out(0) = atan2(-rotation(1,2), rotation(1,1));
-        //     out(1) = atan2(-rotation(2,0), sy);
-        //     out(2) = 0;
-        // }
-
-        // return out;
     }
 
     inline Eigen::Matrix3d euler_to_rotation(const Eigen::Vector3d& attitude){
