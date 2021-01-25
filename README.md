@@ -18,9 +18,6 @@ A toolkit for 3D dynamics and kinematics of rigid bodies using the YPR euler ang
 
 The fundamentals of reference frames and the kinematic relations of these are based on [Theory of Applied Robotics (Reza N. Jazar)](https://link.springer.com/book/10.1007/978-0-387-68964-7) , the idealized rigid body implementation follows the outline suggested in the lectures by [Fossen](https://www.fossen.biz/wiley/ed2/Ch3.pdf).
 
-## Installation
-
-`pip install dynkin`
 
 ## Theory intro
 
@@ -33,9 +30,33 @@ Some basic notions:
 * A `transform` is an object relating two `Frame`s enabling transformation of `positions`, `vectors`, `velocities` etc from one `Frame` to the other. The `Frame`s do not need to be part of the same `kinematic chain`.
 * A `RigidBody` is a 3D body with arbitrary extent that may be described by a generalized inertia matrix (6x6). It accelerates when subject to generalized external forces (`wrenches`) and rotational velocities give rise to inertial forces (coriolis and centripetal contributions).
 
-## Examples
+## C++
 
-### Single frame
+### Installation
+
+`dynkin` can be included as per below if using the CPM.cmake package manager:
+
+```cmake
+CPMAddPackage(
+  NAME dynkin
+  GITHUB_REPOSITORY freol35241/dynkin
+  VERSION 0.3.0
+)
+```
+
+### Examples
+
+See 
+
+## Python
+
+### Installation
+
+`pip install dynkin`
+
+### Examples
+
+#### Single frame
 ```python
 from dynkin import Frame, transform
 
@@ -63,7 +84,7 @@ frame1.get_pose()
 frame.get_twist()
 ```
 
-### Two frames
+#### Two frames
 ```python
 from dynkin import Frame, transform
 
@@ -86,7 +107,7 @@ w1_decomposed_in_frame2 = t12.apply_wrench(w1_decomposed_in_frame1)
 t21 = t12.inv()
 ```
 
-### Kinematic chains
+#### Kinematic chains
 ```python
 from dynkin import Frame, transform
 
@@ -108,5 +129,4 @@ TODO: RigidBody example
 ## License
 
 Distributed under the terms of the MIT license, `dynkin` is free and open source software
-
 

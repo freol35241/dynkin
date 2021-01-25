@@ -1,35 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pulls
-Issues
-Marketplace
-Explore
- 
-@freol35241 
-github
-/
-gitignore
-3.2k
-107k
-57.1k
-Code
-Pull requests
-183
-Actions
-Projects
-Security
-Insights
-gitignore/Python.gitignore
-@pradyunsg
-pradyunsg Remove pip-wheel-metadata/ from Python.gitignore (#3364)
-…
-Latest commit 14f8a8b on Apr 11
- History
- 83 contributors
-@arcresu@shiftkey@Lucretiel@Harrison-G@jwg4@GabrielC101@misaelnieto@pmsosa@svkampen@vltr@thedrow@matheussl
-138 lines (112 sloc)  1.99 KB
-  
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -168,15 +136,9 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-© 2020 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
+
+
+# C++
+/build*
+/.vscode
+/cpm_modules
