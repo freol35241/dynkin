@@ -1,5 +1,6 @@
 
 #include <cmath>
+#include <memory>
 #include <Eigen/Dense>
 #include <Eigen/LU>
 #include <unsupported/Eigen/EulerAngles>
@@ -11,9 +12,12 @@ namespace Eigen {
 
 namespace dynkin {
 
-    struct Frame;
+    struct _Frame;
+    typedef std::shared_ptr<_Frame> Frame;
     struct Transform;
-    Transform transform(Frame*, Frame*);
+    Transform transform(Frame, Frame);
+
+    
 
     inline Eigen::Vector3d rotation_to_euler(const Eigen::Matrix3d& rotation){
         return rotation.eulerAngles(2,1,0).reverse();
@@ -70,49 +74,49 @@ namespace dynkin {
 
     };
 
-    struct Frame{
-        Eigen::Isometry3d HTM = Eigen::Isometry3d::Identity();
-        Eigen::Vector3d linear_velocity = Eigen::Vector3d::Zero();
-        Eigen::Vector3d angular_velocity = Eigen::Vector3d::Zero();
-        Frame* parent = nullptr;
+    Frame create_frame(Frame parent = nullptr){
+      return std::make_shared<_Frame>(parent);
+    }
 
-        Frame& set_parent(Frame* parent){
-            this->parent = parent;
-            return *this;
+    struct _Frame: public std::enable_shared_from_this<_Frame>{
+        Eigen::Isometry3d HTM = Eigen::Isometry3d::Identity();
+        Eigen::Vector3d _linear_velocity = Eigen::Vector3d::Zero();
+        Eigen::Vector3d _angular_velocity = Eigen::Vector3d::Zero();
+        Frame parent;
+
+        _Frame(Frame parent):parent(parent){};
+
+        Frame create_child(){
+          return create_frame(this->shared_from_this());
         }
 
-        Eigen::Vector3d position(){
+        auto position(){
             return this->HTM.translation();
         }
 
-        Frame& set_position(const Eigen::Vector3d& position){
-            this->HTM.translation() = position;
-            return *this;
-        }
-
-        Eigen::Matrix3d rotation(){
+        auto rotation(){
             return this->HTM.linear();
         }
 
-        Frame& set_rotation(const Eigen::Matrix3d& rotation){
-            this->HTM.linear() = rotation;
-            return *this;
+        Eigen::Vector3d& linear_velocity(){
+            return this->_linear_velocity;
         }
 
-        Eigen::Vector3d attitude(){
+        Eigen::Vector3d& angular_velocity(){
+            return this->_angular_velocity;
+        }
+
+        Eigen::Vector3d get_attitude(){
             return rotation_to_euler(this->rotation());
         }
 
-        Frame& set_attitude(const Eigen::Vector3d& attitude){
-            this->set_rotation(
-                euler_to_rotation(attitude)
-            );
-            return *this;
+        void set_attitude(const Eigen::Vector3d& attitude){
+            this->rotation() = euler_to_rotation(attitude);
         }
 
         Eigen::Vector6d get_pose(){
             Eigen::Vector6d out;
-            Transform t = transform(nullptr, this);
+            Transform t = transform(nullptr, this->shared_from_this());
             out.head(3) = t.HTM.translation();
             out.tail(3) = rotation_to_euler(t.HTM.linear());
             return out;
@@ -121,12 +125,12 @@ namespace dynkin {
         Eigen::Vector6d get_twist(){
             Eigen::Vector6d out;
 
-            Eigen::Vector3d v = this->linear_velocity;
-            Eigen::Vector3d w = this->angular_velocity;
+            Eigen::Vector3d v = this->linear_velocity();
+            Eigen::Vector3d w = this->angular_velocity();
 
             if (this->parent != nullptr){
                 Eigen::Vector6d twist_p = this->parent->get_twist();
-                Transform t = transform(this, this->parent);
+                Transform t = transform(this->shared_from_this(), this->parent);
                 v += t.apply_vector(twist_p.head(3)) + twist_p.tail<3>().cross(this->position());
                 w += t.apply_vector(twist_p.tail(3));
             }
@@ -137,10 +141,10 @@ namespace dynkin {
 
     };
 
-    inline Transform transform(Frame* zeroth, Frame* end){
+    inline Transform transform(Frame zeroth, Frame end){
 
         Eigen::Isometry3d HTM = Eigen::Isometry3d::Identity();
-        Frame* f = end;
+        Frame f = end;
         
         while (f != nullptr){
             if (f == zeroth){
@@ -165,6 +169,9 @@ namespace dynkin {
     }
 
     namespace rigidbody{
+
+        struct _RigidBody;
+        typedef std::shared_ptr<_RigidBody> RigidBody;
 
         inline Eigen::Matrix3d skew(const Eigen::Vector3d& v){
             Eigen::Matrix3d out;
@@ -194,11 +201,15 @@ namespace dynkin {
             return H;
         }
 
-        struct RigidBody : public Frame {
+        RigidBody create_rigidbody(const Eigen::Matrix6d& inertia){
+            return std::make_shared<_RigidBody>(inertia);
+        }
+
+        struct _RigidBody : public _Frame {
             Eigen::Matrix6d inertia = Eigen::Matrix6d::Identity();
             Eigen::Vector3d cog = Eigen::Vector3d::Zero();
 
-            RigidBody(const Eigen::Matrix6d inertia): inertia(inertia){};
+            _RigidBody(const Eigen::Matrix6d inertia): _Frame(nullptr), inertia(inertia){};
 
             double mass(){
                 return this->inertia(0,0);
@@ -220,12 +231,12 @@ namespace dynkin {
 
             Eigen::Vector6d generalized_velocities(){
                 Eigen::Vector6d twist = this->get_twist();
-                Transform t = transform(nullptr, this);
+                Transform t = transform(nullptr, this->shared_from_this());
 
                 Eigen::Vector6d out = Eigen::Vector6d::Zero();
                 out.head(3) = t.apply_vector(twist.head(3));
                 out.tail(3) = angular_velocity_to_deuler(
-                    this->attitude(), twist.tail(3) 
+                    this->get_attitude(), twist.tail(3) 
                 );
 
                 return out;
