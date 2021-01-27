@@ -27,9 +27,6 @@ add_executable(dynkinTests tests.cpp)
 target_link_libraries(dynkinTests doctest dynkin::dynkin)
 
 
-# enable compiler warnings
-target_compile_options(dynkin INTERFACE -Wall -pedantic -Wextra -Werror)
-
 # ---- Add dynkinTests ----
 
 enable_testing()

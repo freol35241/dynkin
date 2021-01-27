@@ -8,7 +8,7 @@ Eigen::Vector3d elementwise_sum(const Eigen::Vector3d& first, const Eigen::Vecto
     return first + second;
 }
 
-PYBIND11_MODULE(pydynkin, m) {
+PYBIND11_MODULE(dynkin, m) {
     m.doc() = "dynkin!";
 
     m.def("sum", &elementwise_sum, "A function which adds two 3D vectors");

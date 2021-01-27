@@ -55,6 +55,9 @@ target_include_directories(dynkin
 
 target_link_libraries(dynkin INTERFACE Eigen)
 
+# enable compiler warnings
+target_compile_options(dynkin INTERFACE -Wall -pedantic -Wextra -Werror)
+
 packageProject(
   NAME ${PROJECT_NAME}
   VERSION ${PROJECT_VERSION}
