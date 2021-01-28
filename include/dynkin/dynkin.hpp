@@ -17,7 +17,7 @@ namespace dynkin {
     struct Transform;
     Transform transform(Frame, Frame);
 
-    
+
 
     inline Eigen::Vector3d rotation_to_euler(const Eigen::Matrix3d& rotation){
         return rotation.eulerAngles(2,1,0).reverse();
@@ -145,7 +145,7 @@ namespace dynkin {
 
         Eigen::Isometry3d HTM = Eigen::Isometry3d::Identity();
         Frame f = end;
-        
+
         while (f != nullptr){
             if (f == zeroth){
                 return Transform(HTM);
@@ -153,7 +153,7 @@ namespace dynkin {
 
             HTM = f->HTM*HTM;
             f = f->parent;
-            
+
         }
 
         // If we get to here, the least common base frame is the inertial frame (nullptr)
@@ -169,9 +169,6 @@ namespace dynkin {
     }
 
     namespace rigidbody{
-
-        struct _RigidBody;
-        typedef std::shared_ptr<_RigidBody> RigidBody;
 
         inline Eigen::Matrix3d skew(const Eigen::Vector3d& v){
             Eigen::Matrix3d out;
@@ -201,15 +198,18 @@ namespace dynkin {
             return H;
         }
 
-        RigidBody create_rigidbody(const Eigen::Matrix6d& inertia){
-            return std::make_shared<_RigidBody>(inertia);
-        }
-
-        struct _RigidBody : public _Frame {
+        struct RigidBody {
             Eigen::Matrix6d inertia = Eigen::Matrix6d::Identity();
-            Eigen::Vector3d cog = Eigen::Vector3d::Zero();
+            Frame origin = create_frame();
+            Frame CoG = create_frame(origin);
 
-            _RigidBody(const Eigen::Matrix6d inertia): _Frame(nullptr), inertia(inertia){};
+            RigidBody(
+                const Eigen::Matrix6d inertia,
+                const Eigen::Vector3d& cog = Eigen::Vector3d::Zero()
+                ): inertia(inertia)
+                {
+                    this->CoG->position() = cog;
+                };
 
             double mass(){
                 return this->inertia(0,0);
@@ -226,17 +226,17 @@ namespace dynkin {
             }
 
             Eigen::Vector6d generalized_coordinates(){
-                return this->get_pose();
+                return this->origin->get_pose();
             }
 
             Eigen::Vector6d generalized_velocities(){
-                Eigen::Vector6d twist = this->get_twist();
-                Transform t = transform(nullptr, this->shared_from_this());
+                Eigen::Vector6d twist = this->origin->get_twist();
+                Transform t = transform(nullptr, this->origin);
 
                 Eigen::Vector6d out = Eigen::Vector6d::Zero();
                 out.head(3) = t.apply_vector(twist.head(3));
                 out.tail(3) = angular_velocity_to_deuler(
-                    this->get_attitude(), twist.tail(3) 
+                    this->origin->get_attitude(), twist.tail(3)
                 );
 
                 return out;
@@ -250,9 +250,9 @@ namespace dynkin {
                 Eigen::Matrix6d H, I_cg, C_cg, I_b, C_b;
 
                 f = wrench;
-                twist = this->get_twist();
+                twist = this->origin->get_twist();
 
-                H = motion_transformation_matrix(this->cog);
+                H = motion_transformation_matrix(this->CoG->position());
                 I_cg = (this->inertia.array() + additional_inertia.array()).matrix();
                 C_cg = this->coriolis_centripetal_matrix(I_cg, twist);
                 I_b = H.transpose() * I_cg * H;
@@ -271,9 +271,9 @@ namespace dynkin {
                 Eigen::Vector6d twist, f_cc, f;
                 Eigen::Matrix6d H, I_cg, C_cg, I_b, C_b;
 
-                twist = this->get_twist();
+                twist = this->origin->get_twist();
 
-                H = motion_transformation_matrix(this->cog);
+                H = motion_transformation_matrix(this->CoG->position());
                 I_cg = (this->inertia.array() + additional_inertia.array()).matrix();
                 C_cg = this->coriolis_centripetal_matrix(I_cg, twist);
                 I_b = H.transpose() * I_cg * H;

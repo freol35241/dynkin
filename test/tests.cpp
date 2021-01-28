@@ -145,10 +145,10 @@ TEST_CASE("Test generalized coordinates"){
     using namespace dynkin;
     using namespace dynkin::rigidbody;
 
-    RigidBody rb = create_rigidbody(generalized_inertia_matrix(1, {1,1,1}));
-    rb->position() << 1,2,3;
-    rb->set_attitude({0,1,1});
-    Eigen::Vector6d pose = rb->generalized_coordinates();
+    RigidBody rb = RigidBody(generalized_inertia_matrix(1, {1,1,1}));
+    rb.origin->position() << 1,2,3;
+    rb.origin->set_attitude({0,1,1});
+    Eigen::Vector6d pose = rb.generalized_coordinates();
 
     Eigen::Vector6d expected;
     expected << 1,2,3,0,1,1;
@@ -160,12 +160,12 @@ TEST_CASE("Test generalized velocities"){
     using namespace dynkin;
     using namespace dynkin::rigidbody;
 
-    RigidBody rb = create_rigidbody(generalized_inertia_matrix(1, {1,1,1}));
-    rb->position() << 1,1,1;
-    rb->set_attitude({M_PI_2, 0, M_PI_2});
-    rb->linear_velocity() << 1, 2, 3;
-    rb->angular_velocity() << 0, 0, 1;
-    Eigen::Vector6d vel = rb->generalized_velocities();
+    RigidBody rb = RigidBody(generalized_inertia_matrix(1, {1,1,1}));
+    rb.origin->position() << 1,1,1;
+    rb.origin->set_attitude({M_PI_2, 0, M_PI_2});
+    rb.origin->linear_velocity() << 1, 2, 3;
+    rb.origin->angular_velocity() << 0, 0, 1;
+    Eigen::Vector6d vel = rb.generalized_velocities();
 
     Eigen::Vector6d expected;
     expected << 3, 1, 2, 0, -1, 0;
@@ -177,50 +177,52 @@ TEST_CASE("Test Coriolis-Centripetal acceleration with CoG offset"){
     using namespace dynkin;
     using namespace dynkin::rigidbody;
 
-    RigidBody rb = create_rigidbody(generalized_inertia_matrix(1, {1,1,1}));
-    rb->cog = {1, 0, 0};
-    rb->angular_velocity() << 0, 0, 1;
+    RigidBody rb = RigidBody(
+        generalized_inertia_matrix(1, {1,1,1}),
+        {1, 0, 0}
+    );
+    rb.origin->angular_velocity() << 0, 0, 1;
 
     Eigen::Vector6d expected;
     expected << 1, 0, 0, 0, 0, 0;
 
-    CHECK_EQ(rb->acceleration(Eigen::Vector6d::Zero()), expected);
+    CHECK_EQ(rb.acceleration(Eigen::Vector6d::Zero()), expected);
 }
 
 TEST_CASE("Test Coriolis-Centripetal acceleration due to linear velocity"){
     using namespace dynkin;
     using namespace dynkin::rigidbody;
 
-    RigidBody rb = create_rigidbody(generalized_inertia_matrix(1, {1,1,1}));
-    rb->linear_velocity() << 1, 0, 0;
-    rb->angular_velocity() << 0, 0, 1;
+    RigidBody rb = RigidBody(generalized_inertia_matrix(1, {1,1,1}));
+    rb.origin->linear_velocity() << 1, 0, 0;
+    rb.origin->angular_velocity() << 0, 0, 1;
 
     Eigen::Vector6d expected;
     expected << 0, -1, 0, 0, 0, 0;
 
-    CHECK_EQ(rb->acceleration(Eigen::Vector6d::Zero()), expected);
+    CHECK_EQ(rb.acceleration(Eigen::Vector6d::Zero()), expected);
 }
 
 TEST_CASE("Test acceleration -> wrench"){
     using namespace dynkin;
     using namespace dynkin::rigidbody;
 
-    RigidBody rb = create_rigidbody(generalized_inertia_matrix(1, {1,1,1}));
+    RigidBody rb = RigidBody(generalized_inertia_matrix(1, {1,1,1}));
     Eigen::Vector6d wrench = Eigen::Vector6d::Ones();
-    Eigen::Vector6d acc = rb->acceleration(wrench);
+    Eigen::Vector6d acc = rb.acceleration(wrench);
 
     CHECK_EQ(acc, Eigen::Vector6d::Ones());
 
 
-    rb->cog = {1, 0, 0};
-    acc = rb->acceleration(wrench);
+    rb.CoG->position() << 1, 0, 0;
+    acc = rb.acceleration(wrench);
     Eigen::Vector6d expected;
     expected << 1, 1, 3, 1, 2, 0;
 
     CHECK_EQ(acc, expected);
 
 
-    Eigen::Vector6d f = rb->wrench(acc);
+    Eigen::Vector6d f = rb.wrench(acc);
     CHECK_EQ(wrench, f);
 
 }
@@ -229,22 +231,22 @@ TEST_CASE("Test acceleration -> wrench"){
     using namespace dynkin;
     using namespace dynkin::rigidbody;
 
-    RigidBody rb = create_rigidbody(generalized_inertia_matrix(1, {1,1,1}));
+    RigidBody rb = RigidBody(generalized_inertia_matrix(1, {1,1,1}));
     Eigen::Vector6d acc = Eigen::Vector6d::Ones();
-    Eigen::Vector6d wrench = rb->wrench(acc);
+    Eigen::Vector6d wrench = rb.wrench(acc);
 
     CHECK_EQ(wrench, Eigen::Vector6d::Ones());
 
 
-    rb->cog = {1, 0, 0};
-    wrench = rb->wrench(acc);
+    rb.CoG->position() << 1, 0, 0;
+    wrench = rb.wrench(acc);
     Eigen::Vector6d expected;
     expected << 1, 2, 0, 1, 1, 3;
 
     CHECK_EQ(wrench, expected);
 
 
-    Eigen::Vector6d a = rb->acceleration(wrench);
+    Eigen::Vector6d a = rb.acceleration(wrench);
     CHECK_EQ(acc, a);
 
 }
