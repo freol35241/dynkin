@@ -227,7 +227,7 @@ TEST_CASE("Test acceleration -> wrench"){
 
 }
 
-TEST_CASE("Test acceleration -> wrench"){
+TEST_CASE("Test wrench -> acceleration"){
     using namespace dynkin;
     using namespace dynkin::rigidbody;
 
