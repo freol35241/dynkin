@@ -13,7 +13,7 @@ namespace Eigen {
 namespace dynkin {
 
     struct _Frame;
-    typedef std::shared_ptr<_Frame> Frame;
+    using Frame = std::shared_ptr<_Frame>;
     struct Transform;
     Transform transform(Frame, Frame);
 
@@ -29,23 +29,6 @@ namespace dynkin {
             * Eigen::AngleAxisd(attitude(1), Eigen::Vector3d::UnitY())
             * Eigen::AngleAxisd(attitude(0), Eigen::Vector3d::UnitX())
             ).toRotationMatrix();
-    }
-
-    inline Eigen::Matrix3d eulerian(const Eigen::Vector3d& attitude){
-        double fi = attitude(0);
-        double theta = attitude(1);
-        Eigen::Matrix3d out;
-        out <<  1,      sin(fi)*cos(theta),     cos(fi)*tan(theta),
-                0,      cos(fi),                -sin(fi),
-                0,      sin(fi)/cos(theta),     cos(fi)/cos(theta);
-        return out;
-    }
-
-    inline Eigen::Vector3d angular_velocity_to_deuler(
-        const Eigen::Vector3d& attitude,
-        const Eigen::Vector3d& angular_velocity
-    ){
-        return eulerian(attitude)*angular_velocity;
     }
 
     struct Transform{
@@ -198,10 +181,27 @@ namespace dynkin {
             return H;
         }
 
+        inline Eigen::Matrix3d eulerian(const Eigen::Vector3d& attitude){
+            double fi = attitude(0);
+            double theta = attitude(1);
+            Eigen::Matrix3d out;
+            out <<  1,      sin(fi)*cos(theta),     cos(fi)*tan(theta),
+                    0,      cos(fi),                -sin(fi),
+                    0,      sin(fi)/cos(theta),     cos(fi)/cos(theta);
+            return out;
+        }
+
+        inline Eigen::Vector3d angular_velocity_to_deuler(
+            const Eigen::Vector3d& attitude,
+            const Eigen::Vector3d& angular_velocity
+        ){
+            return eulerian(attitude)*angular_velocity;
+        }
+
         struct RigidBody {
             Eigen::Matrix6d inertia = Eigen::Matrix6d::Identity();
-            Frame origin = create_frame();
-            Frame CoG = create_frame(origin);
+            const Frame origin = create_frame();
+            const Frame CoG = create_frame(origin);
 
             RigidBody(
                 const Eigen::Matrix6d inertia,
