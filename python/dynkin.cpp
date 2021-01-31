@@ -11,7 +11,10 @@ using namespace dynkin::rigidbody;
 typedef Eigen::Matrix<double,6,6,Eigen::RowMajor> RowMatrix6d;
 
 PYBIND11_MODULE(dynkin, m) {
-    m.doc() = "dynkin!";
+    m.doc() = R"docs(
+        A toolkit for 3D dynamics and kinematics of rigid bodies using the
+        YPR euler angle convention.
+    )docs");
 
     py::class_<_Frame, Frame>(m, "Frame")
         .def(py::init(&create_frame), "parent"_a = nullptr)
