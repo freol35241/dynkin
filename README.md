@@ -1,12 +1,6 @@
 # dynkin
 
-[![PyPI version shields.io](https://img.shields.io/pypi/v/dynkin.svg)](https://pypi.python.org/pypi/dynkin/)
-![](https://github.com/freol35241/dynkin/workflows/dynkin/badge.svg)
-[![codecov](https://codecov.io/gh/freol35241/dynkin/branch/master/graph/badge.svg)](https://codecov.io/gh/freol35241/dynkin)
-
 A toolkit for 3D dynamics and kinematics of rigid bodies using the YPR euler angle convention.
-
-[**--> Docs <--**](https://freol35241.github.io/dynkin/)
 
 ## General
 
@@ -30,8 +24,6 @@ Some basic notions:
 * A `transform` is an object relating two `Frame`s enabling transformation of `positions`, `vectors`, `velocities` etc from one `Frame` to the other. The `Frame`s do not need to be part of the same `kinematic chain`.
 * A `RigidBody` is a 3D body with arbitrary extent that may be described by a generalized inertia matrix (6x6). It accelerates when subject to generalized external forces (`wrenches`) and rotational velocities give rise to inertial forces (coriolis and centripetal contributions).
 
-## C++
-
 ### Installation
 
 `dynkin` can be included as per below if using the CPM.cmake package manager:
@@ -46,85 +38,7 @@ CPMAddPackage(
 
 ### Examples
 
-See 
-
-## Python
-
-### Installation
-
-`pip install dynkin`
-
-### Examples
-
-#### Single frame
-```python
-from dynkin import Frame, transform
-
-frame1 = Frame(position=[1, 2, 3], attitude=[0, 0, 90], degrees=True)
-
-# Find transformation from the inertial frame to frame1
-ti1 = transform(None, frame1)
-
-# Transformation of vector
-v1_decomposed_in_frame1 = ti1.apply_vector(v1_decomposed_in_inertial_frame)
-
-# Transformation of position
-p1_decomposed_in_frame1 = ti1.apply_position(p1_decomposed_in_inertial_frame)
-
-# Transformation of wrench
-w1_decomposed_in_frame1 = ti1.apply_wrench(w1_decomposed_in_inertial_frame)
-
-# Find the inverse transformation
-t1i = ti1.inv()
-
-# Pose of this frame, decomposed in inertial frame
-frame1.get_pose()
-
-# Twist of this frame, decomposed in inertial frame
-frame.get_twist()
-```
-
-#### Two frames
-```python
-from dynkin import Frame, transform
-
-frame1 = Frame(position=[1, 2, 3], attitude=[0, 0, 90], degrees=True)
-frame2 = Frame(position=[3, 2, 1], attitude=[0, 0, -90], degrees=True)
-
-# Find transformation from frame1 to frame2
-t12 = transform(frame1, frame2)
-
-# Transformation of vector
-v1_decomposed_in_frame2 = t12.apply_vector(v1_decomposed_in_frame1)
-
-# Transformation of position
-p1_decomposed_in_frame2 = t12.apply_position(p1_decomposed_in_frame1)
-
-# Transformation of wrench
-w1_decomposed_in_frame2 = t12.apply_wrench(w1_decomposed_in_frame1)
-
-# Find the inverse transformation
-t21 = t12.inv()
-```
-
-#### Kinematic chains
-```python
-from dynkin import Frame, transform
-
-frame1 = Frame(position=[1, 2, 3], attitude=[0, 0, 90], degrees=True)
-frame2 = frame1.align_child(position=[3, 2, 1], attitude=[0, 0, -90], degrees=True)
-frame3 = frame2.align_child(position=[1, 1, 1], attitude=[0, 0, 0], degrees=True)
-
-# Find transformation from inertial frame to frame3
-ti3 = transform(None, frame3)
-
-# Transformation from frame3 and frame1
-t31 = transform(frame3, frame1)
-
-...
-```
-
-TODO: RigidBody example
+TODO!
 
 ## License
 

@@ -1,12 +1,12 @@
-name: Ubuntu
+name: CI checks
 
 on:
   push:
     branches:
-      - cpp_trial
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 env:
   CTEST_OUTPUT_ON_FAILURE: 1
