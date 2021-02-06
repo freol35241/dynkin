@@ -237,9 +237,9 @@ namespace dynkin {
     /**
      * @brief Find transform between two frames
      * 
-     * @param zeroth 
-     * @param end 
-     * @return Transform 
+     * @param zeroth Zeroth frame of transform
+     * @param end End frame of transform
+     * @return Transform from zeroth to end
      */
     inline Transform transform(Frame zeroth, Frame end){
 
