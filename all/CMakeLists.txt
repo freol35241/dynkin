@@ -8,4 +8,3 @@ project(BuildAll LANGUAGES CXX)
 include(../cmake/tools.cmake)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../test ${CMAKE_BINARY_DIR}/test)
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../documentation ${CMAKE_BINARY_DIR}/documentation)
