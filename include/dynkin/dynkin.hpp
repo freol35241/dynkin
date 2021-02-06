@@ -268,6 +268,10 @@ namespace dynkin {
         return Transform(T_.HTM*T.HTM);
     }
 
+    /**
+     * @brief `rigidbody`namespace
+     * 
+     */
     namespace rigidbody{
 
         /**
