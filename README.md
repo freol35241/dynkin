@@ -26,15 +26,17 @@ Some basic notions:
 
 ### Installation
 
-`dynkin` can be included as per below if using the CPM.cmake package manager:
+`dynkin` can be included as per below in your cmake workflow if using the [CPM.cmake package manager](https://github.com/TheLartians/CPM.cmake):
 
 ```cmake
 CPMAddPackage(
   NAME dynkin
   GITHUB_REPOSITORY freol35241/dynkin
-  VERSION 0.3.0
+  VERSION 0.1.0
 )
 ```
+
+Or, since `dynkin` is a single-file and header-only file library, just copy ```dynkin.hpp``` into your project.
 
 ### Examples
 
