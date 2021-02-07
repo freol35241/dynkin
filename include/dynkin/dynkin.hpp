@@ -29,7 +29,7 @@ namespace dynkin {
     struct _Frame;
     using Frame = std::shared_ptr<_Frame>;
     struct Transform;
-    Transform transform(Frame, Frame);
+    Transform transform(Frame zeroth, Frame end);
 
     /**
      * @brief Convert a 3x3 rotation matrix to euler angles using
