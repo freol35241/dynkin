@@ -140,5 +140,4 @@ cython_debug/
 
 # C++
 /build*
-/.vscode
 /cpm_modules
