@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get install doxygen -y
+          sudo apt-get install -y doxygen
           pip install -r requirements_dev.txt
 
       - name: Build
