@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>dynkin::rigidbody namespace | dynkin</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="favicon-dark.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m">dynkin</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li><a href="namespaces.html">Namespaces</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="2">
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <span class="m-breadcrumb"><a href="namespacedynkin.html">dynkin</a>::<wbr/></span>rigidbody <span class="m-thin">namespace</span>
+        </h1>
+        <p><code>rigidbody</code>namespace</p>
+        <div class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#nested-classes">Classes</a></li>
+                <li><a href="#func-members">Functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <section id="nested-classes">
+          <h2><a href="#nested-classes">Classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              struct <a href="structdynkin_1_1rigidbody_1_1RigidBody.html" class="m-doc">RigidBody</a>
+            </dt>
+            <dd>Representing an ideal rigid body.</dd>
+          </dl>
+        </section>
+        <section id="func-members">
+          <h2><a href="#func-members">Functions</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ab1c5fc04d0848d44a0f9b95bb9367737" class="m-doc">skew</a>(</span><span class="m-doc-wrap">const Eigen::Vector3d&amp; v) -&gt; Eigen::Matrix3d</span>
+            </dt>
+            <dd>Create a skew matrix (3x3) from a (3x1) vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a5ead9f02f50446af478cdea9695e94b2" class="m-doc">motion_transformation_matrix</a>(</span><span class="m-doc-wrap">const Eigen::Vector3d&amp; position) -&gt; <a href="namespaceEigen.html#aeec1656c48c6446d2e12eed7a92427c7" class="m-doc">Eigen::<wbr />Matrix6d</a></span>
+            </dt>
+            <dd>Create a Motion Transformation Matrix (6x6)</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ad1af03ec19581330f43da06f3f2efaa4" class="m-doc">generalized_inertia_matrix</a>(</span><span class="m-doc-wrap">const double&amp; mass,
+              const Eigen::Vector3d&amp; gyradii) -&gt; <a href="namespaceEigen.html#aeec1656c48c6446d2e12eed7a92427c7" class="m-doc">Eigen::<wbr />Matrix6d</a></span>
+            </dt>
+            <dd>Create Generalized Inertia Matrix (6x6)</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a0662c06eb429200a16cd648b42a59206" class="m-doc">eulerian</a>(</span><span class="m-doc-wrap">const Eigen::Vector3d&amp; attitude) -&gt; Eigen::Matrix3d</span>
+            </dt>
+            <dd>Create an Eulerian Matrix (3x3) relating angular velocity to euler angle derivatives.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a8fff58726ce87b313cde9d2956694ec5" class="m-doc">angular_velocity_to_deuler</a>(</span><span class="m-doc-wrap">const Eigen::Vector3d&amp; attitude,
+              const Eigen::Vector3d&amp; angular_velocity) -&gt; Eigen::Vector3d</span>
+            </dt>
+            <dd>Convert angular velocities to euler angle derivatives.</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ab1c5fc04d0848d44a0f9b95bb9367737"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Eigen::Matrix3d dynkin::<wbr />rigidbody::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab1c5fc04d0848d44a0f9b95bb9367737" class="m-doc-self">skew</a>(</span><span class="m-doc-wrap">const Eigen::Vector3d&amp; v)</span></span>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="dynkin_8hpp.html">&lt;dynkin/dynkin.hpp&gt;</a></div>
+            </h3>
+            <p>Create a skew matrix (3x3) from a (3x1) vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>Vector to create skew matrix from</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Skew matrix</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a5ead9f02f50446af478cdea9695e94b2"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="namespaceEigen.html#aeec1656c48c6446d2e12eed7a92427c7" class="m-doc">Eigen::<wbr />Matrix6d</a> dynkin::<wbr />rigidbody::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5ead9f02f50446af478cdea9695e94b2" class="m-doc-self">motion_transformation_matrix</a>(</span><span class="m-doc-wrap">const Eigen::Vector3d&amp; position)</span></span>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="dynkin_8hpp.html">&lt;dynkin/dynkin.hpp&gt;</a></div>
+            </h3>
+            <p>Create a Motion Transformation Matrix (6x6)</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">position</td>
+                  <td>Position vector defining the transformation</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Motion Transformation Matrix</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ad1af03ec19581330f43da06f3f2efaa4"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"><a href="namespaceEigen.html#aeec1656c48c6446d2e12eed7a92427c7" class="m-doc">Eigen::<wbr />Matrix6d</a> dynkin::<wbr />rigidbody::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad1af03ec19581330f43da06f3f2efaa4" class="m-doc-self">generalized_inertia_matrix</a>(</span><span class="m-doc-wrap">const double&amp; mass,
+              const Eigen::Vector3d&amp; gyradii)</span></span>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="dynkin_8hpp.html">&lt;dynkin/dynkin.hpp&gt;</a></div>
+            </h3>
+            <p>Create Generalized Inertia Matrix (6x6)</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">mass</td>
+                  <td>Rigid body mass</td>
+                </tr>
+                <tr>
+                  <td>gyradii</td>
+                  <td>Rigid body gyradii (3x1)</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Generalized Inertia Matrix (6x6)</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a0662c06eb429200a16cd648b42a59206"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Eigen::Matrix3d dynkin::<wbr />rigidbody::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a0662c06eb429200a16cd648b42a59206" class="m-doc-self">eulerian</a>(</span><span class="m-doc-wrap">const Eigen::Vector3d&amp; attitude)</span></span>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="dynkin_8hpp.html">&lt;dynkin/dynkin.hpp&gt;</a></div>
+            </h3>
+            <p>Create an Eulerian Matrix (3x3) relating angular velocity to euler angle derivatives.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">attitude</td>
+                  <td>Attitude (3x1)</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Eulerian Matrix (3x3)</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a8fff58726ce87b313cde9d2956694ec5"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">Eigen::Vector3d dynkin::<wbr />rigidbody::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a8fff58726ce87b313cde9d2956694ec5" class="m-doc-self">angular_velocity_to_deuler</a>(</span><span class="m-doc-wrap">const Eigen::Vector3d&amp; attitude,
+              const Eigen::Vector3d&amp; angular_velocity)</span></span>
+              <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="dynkin_8hpp.html">&lt;dynkin/dynkin.hpp&gt;</a></div>
+            </h3>
+            <p>Convert angular velocities to euler angle derivatives.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">attitude</td>
+                  <td>Attitude of rigid body (3x1)</td>
+                </tr>
+                <tr>
+                  <td>angular_velocity</td>
+                  <td>Angular velocity of rigid body (3x1)</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Euler angle derivatives of rigid body (3x1)</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span>
+            / <span class="m-label m-dim">&uarr;</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v1.js"></script>
+<script src="searchdata-v1.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>dynkin. Created with <a href="https://doxygen.org/">Doxygen</a> 1.8.13 and <a href="https://mcss.mosra.cz/">m.css</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>
