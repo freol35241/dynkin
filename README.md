@@ -40,9 +40,117 @@ Or, since `dynkin` is a single-file and header-only file library, just copy ```d
 
 ### Examples
 
-TODO!
+**Single frame**
+
+```c++
+#include <Eigen/Dense>
+#include <dynkin/dynkin.hpp>
+
+#define DEG2RAD M_PI/180.0f
+
+using namespace dynkin;
+
+Frame frame1 = create_frame();
+frame1->position() << 1, 2, 3;
+frame1->set_attitude({0,0,90*DEG2RAD});
+
+// Find transformation from the inertial frame to frame1
+Transform ti1 = transform(nullptr, frame1);
+
+// Transformation of vector
+Eigen::Vector3d v1_decomposed_in_inertial_frame, v1_decomposed_in_frame1;
+v1_decomposed_in_frame1 = ti1.apply_vector(v1_decomposed_in_inertial_frame);
+
+// Transformation of position
+Eigen::Vector3d p1_decomposed_in_inertial_frame, p1_decomposed_in_frame1;
+p1_decomposed_in_frame1 = ti1.apply_position(p1_decomposed_in_inertial_frame);
+
+// Transformation of wrench
+Eigen::Vector6d w1_decomposed_in_inertial_frame, w1_decomposed_in_frame1;
+w1_decomposed_in_frame1 = ti1.apply_wrench(w1_decomposed_in_inertial_frame);
+
+// Find the inverse transformation
+Transform t1i = ti1.inverse();
+
+// Pose of this frame, decomposed in inertial frame
+Eigen::Vector6d pose = frame1.get_pose();
+
+// Twist of this frame, decomposed in inertial frame
+Eigen::Vector6d = frame1.get_twist();
+```
+
+**Two frames**
+```c++
+#include <Eigen/Dense>
+#include <dynkin/dynkin.hpp>
+
+#define DEG2RAD M_PI/180.0f
+
+using namespace dynkin;
+
+Frame frame1 = create_frame();
+frame1->position() << 1, 2, 3;
+frame1->set_attitude({0,0,90*DEG2RAD});
+
+Frame frame2 = create_frame();
+frame2->position() << 3, 2, 1;
+frame2->set_attitude({0,0,-90*DEG2RAD});
+
+// Find transformation from frame1 to frame2
+Transform t12 = transform(frame1, frame2);
+
+// Transformation of vector
+Eigen::Vector3d v1_decomposed_in_frame1, v1_decomposed_in_frame2;
+v1_decomposed_in_frame2 = t12.apply_vector(v1_decomposed_in_frame1);
+
+// Transformation of position
+Eigen::Vector3d p1_decomposed_in_frame1, p1_decomposed_in_frame2;
+p1_decomposed_in_frame2 = t12.apply_position(p1_decomposed_in_frame1);
+
+// Transformation of wrench
+Eigen::Vector6d w1_decomposed_in_frame1, w1_decomposed_in_frame2;
+w1_decomposed_in_frame2 = t12.apply_wrench(w1_decomposed_in_frame1);
+
+// Find the inverse transformation
+Transform t21 = t12.inverse();
+```
+
+**Kinematic chains**
+```c++
+#include <Eigen/Dense>
+#include <dynkin/dynkin.hpp>
+
+#define DEG2RAD M_PI/180.0f
+
+using namespace dynkin;
+
+Frame frame1 = create_frame();
+frame1->position() << 1, 2, 3;
+frame1->set_attitude({0,0,90*DEG2RAD});
+
+Frame frame2 = frame1->create_child();
+frame1->position() << 3, 2, 1;
+frame1->set_attitude({0,0,-90*DEG2RAD});
+
+Frame frame3 = frame2->create_child();
+frame3->position() << 1, 1, 1;
+
+
+// Find transformation from inertial frame to frame3
+Transform ti3 = transform(None, frame3);
+
+// Transformation from frame3 and frame1
+Transform t31 = transform(frame3, frame1);
+
+...
+```
+
+**Rigid body**
+```c++
+TODO
+```
 
 ## License
 
-Distributed under the terms of the MIT license, `dynkin` is free and open source software
+Distributed under the terms of the MIT license, `dynkin` is open source software.
 
