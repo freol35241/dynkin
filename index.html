@@ -49,7 +49,100 @@
   <span class="n">NAME</span> <span class="n">dynkin</span>
   <span class="n">GITHUB_REPOSITORY</span> <span class="n">freol35241</span><span class="o">/</span><span class="n">dynkin</span>
   <span class="n">VERSION</span> <span class="mf">0.1.0</span>
-<span class="p">)</span></pre><p>Or, since <code>dynkin</code> is a single-file and header-only file library, just copy <code><a href="dynkin_8hpp.html" class="m-doc">dynkin.hpp</a></code> into your project.</p><h4>Examples</h4><p>TODO!</p><h3>License</h3><p>Distributed under the terms of the MIT license, <code>dynkin</code> is free and open source software</p>
+<span class="p">)</span></pre><p>Or, since <code>dynkin</code> is a single-file and header-only file library, just copy <code><a href="dynkin_8hpp.html" class="m-doc">dynkin.hpp</a></code> into your project.</p><h4>Examples</h4><p><strong>Single frame</strong></p><pre class="m-code"><span class="p">{</span><span class="n">c</span><span class="o">++</span><span class="p">}</span>
+<span class="cp">#include</span> <span class="cpf">&lt;Eigen/Dense&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;dynkin/dynkin.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#define DEG2RAD M_PI/180.0f</span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">dynkin</span><span class="p">;</span>
+
+<span class="n">Frame</span> <span class="n">frame1</span> <span class="o">=</span> <span class="n">create_frame</span><span class="p">();</span>
+<span class="n">frame1</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">frame1</span><span class="o">-&gt;</span><span class="n">set_attitude</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="o">*</span><span class="n">DEG2RAD</span><span class="p">});</span>
+
+<span class="c1">// Find transformation from the inertial frame to frame1</span>
+<span class="n">Transform</span> <span class="n">ti1</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="k">nullptr</span><span class="p">,</span> <span class="n">frame1</span><span class="p">);</span>
+
+<span class="c1">// Transformation of vector</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">v1_decomposed_in_inertial_frame</span><span class="p">,</span> <span class="n">v1_decomposed_in_frame1</span><span class="p">;</span>
+<span class="n">v1_decomposed_in_frame1</span> <span class="o">=</span> <span class="n">ti1</span><span class="p">.</span><span class="n">apply_vector</span><span class="p">(</span><span class="n">v1_decomposed_in_inertial_frame</span><span class="p">);</span>
+
+<span class="c1">// Transformation of position</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">p1_decomposed_in_inertial_frame</span><span class="p">,</span> <span class="n">p1_decomposed_in_frame1</span><span class="p">;</span>
+<span class="n">p1_decomposed_in_frame1</span> <span class="o">=</span> <span class="n">ti1</span><span class="p">.</span><span class="n">apply_position</span><span class="p">(</span><span class="n">p1_decomposed_in_inertial_frame</span><span class="p">);</span>
+
+<span class="c1">// Transformation of wrench</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">Vector6d</span> <span class="n">w1_decomposed_in_inertial_frame</span><span class="p">,</span> <span class="n">w1_decomposed_in_frame1</span><span class="p">;</span>
+<span class="n">w1_decomposed_in_frame1</span> <span class="o">=</span> <span class="n">ti1</span><span class="p">.</span><span class="n">apply_wrench</span><span class="p">(</span><span class="n">w1_decomposed_in_inertial_frame</span><span class="p">);</span>
+
+<span class="c1">// Find the inverse transformation</span>
+<span class="n">Transform</span> <span class="n">t1i</span> <span class="o">=</span> <span class="n">ti1</span><span class="p">.</span><span class="n">inverse</span><span class="p">();</span>
+
+<span class="c1">// Pose of this frame, decomposed in inertial frame</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">Vector6d</span> <span class="n">pose</span> <span class="o">=</span> <span class="n">frame1</span><span class="p">.</span><span class="n">get_pose</span><span class="p">();</span>
+
+<span class="c1">// Twist of this frame, decomposed in inertial frame</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">Vector6d</span> <span class="o">=</span> <span class="n">frame1</span><span class="p">.</span><span class="n">get_twist</span><span class="p">();</span></pre><p><strong>Two frames</strong></p><pre class="m-code"><span class="p">{</span><span class="n">c</span><span class="o">++</span><span class="p">}</span>
+<span class="cp">#include</span> <span class="cpf">&lt;Eigen/Dense&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;dynkin/dynkin.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#define DEG2RAD M_PI/180.0f</span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">dynkin</span><span class="p">;</span>
+
+<span class="n">Frame</span> <span class="n">frame1</span> <span class="o">=</span> <span class="n">create_frame</span><span class="p">();</span>
+<span class="n">frame1</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">frame1</span><span class="o">-&gt;</span><span class="n">set_attitude</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="o">*</span><span class="n">DEG2RAD</span><span class="p">});</span>
+
+<span class="n">Frame</span> <span class="n">frame2</span> <span class="o">=</span> <span class="n">create_frame</span><span class="p">();</span>
+<span class="n">frame2</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">frame2</span><span class="o">-&gt;</span><span class="n">set_attitude</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">-90</span><span class="o">*</span><span class="n">DEG2RAD</span><span class="p">});</span>
+
+<span class="c1">// Find transformation from frame1 to frame2</span>
+<span class="n">Transform</span> <span class="n">t12</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">frame1</span><span class="p">,</span> <span class="n">frame2</span><span class="p">);</span>
+
+<span class="c1">// Transformation of vector</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">v1_decomposed_in_frame1</span><span class="p">,</span> <span class="n">v1_decomposed_in_frame2</span><span class="p">;</span>
+<span class="n">v1_decomposed_in_frame2</span> <span class="o">=</span> <span class="n">t12</span><span class="p">.</span><span class="n">apply_vector</span><span class="p">(</span><span class="n">v1_decomposed_in_frame1</span><span class="p">);</span>
+
+<span class="c1">// Transformation of position</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span> <span class="n">p1_decomposed_in_frame1</span><span class="p">,</span> <span class="n">p1_decomposed_in_frame2</span><span class="p">;</span>
+<span class="n">p1_decomposed_in_frame2</span> <span class="o">=</span> <span class="n">t12</span><span class="p">.</span><span class="n">apply_position</span><span class="p">(</span><span class="n">p1_decomposed_in_frame1</span><span class="p">);</span>
+
+<span class="c1">// Transformation of wrench</span>
+<span class="n">Eigen</span><span class="o">::</span><span class="n">Vector6d</span> <span class="n">w1_decomposed_in_frame1</span><span class="p">,</span> <span class="n">w1_decomposed_in_frame2</span><span class="p">;</span>
+<span class="n">w1_decomposed_in_frame2</span> <span class="o">=</span> <span class="n">t12</span><span class="p">.</span><span class="n">apply_wrench</span><span class="p">(</span><span class="n">w1_decomposed_in_frame1</span><span class="p">);</span>
+
+<span class="c1">// Find the inverse transformation</span>
+<span class="n">Transform</span> <span class="n">t21</span> <span class="o">=</span> <span class="n">t12</span><span class="p">.</span><span class="n">inverse</span><span class="p">();</span></pre><p><strong>Kinematic chains</strong></p><pre class="m-code"><span class="p">{</span><span class="n">c</span><span class="o">++</span><span class="p">}</span>
+<span class="cp">#include</span> <span class="cpf">&lt;Eigen/Dense&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;dynkin/dynkin.hpp&gt;</span><span class="cp"></span>
+
+<span class="cp">#define DEG2RAD M_PI/180.0f</span>
+
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">dynkin</span><span class="p">;</span>
+
+<span class="n">Frame</span> <span class="n">frame1</span> <span class="o">=</span> <span class="n">create_frame</span><span class="p">();</span>
+<span class="n">frame1</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">frame1</span><span class="o">-&gt;</span><span class="n">set_attitude</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">90</span><span class="o">*</span><span class="n">DEG2RAD</span><span class="p">});</span>
+
+<span class="n">Frame</span> <span class="n">frame2</span> <span class="o">=</span> <span class="n">frame1</span><span class="o">-&gt;</span><span class="n">create_child</span><span class="p">();</span>
+<span class="n">frame1</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">frame1</span><span class="o">-&gt;</span><span class="n">set_attitude</span><span class="p">({</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">-90</span><span class="o">*</span><span class="n">DEG2RAD</span><span class="p">});</span>
+
+<span class="n">Frame</span> <span class="n">frame3</span> <span class="o">=</span> <span class="n">frame2</span><span class="o">-&gt;</span><span class="n">create_child</span><span class="p">();</span>
+<span class="n">frame3</span><span class="o">-&gt;</span><span class="n">position</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">;</span>
+
+
+<span class="c1">// Find transformation from inertial frame to frame3</span>
+<span class="n">Transform</span> <span class="n">ti3</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">None</span><span class="p">,</span> <span class="n">frame3</span><span class="p">);</span>
+
+<span class="c1">// Transformation from frame3 and frame1</span>
+<span class="n">Transform</span> <span class="n">t31</span> <span class="o">=</span> <span class="n">transform</span><span class="p">(</span><span class="n">frame3</span><span class="p">,</span> <span class="n">frame1</span><span class="p">);</span>
+
+<span class="p">...</span></pre><p><strong>Rigid body</strong></p><pre class="m-code"><span class="p">{</span><span class="n">c</span><span class="o">++</span><span class="p">}</span>
+<span class="n">TODO</span></pre><h3>License</h3><p>Distributed under the terms of the MIT license, <code>dynkin</code> is open source software.</p>
       </div>
     </div>
   </div>
