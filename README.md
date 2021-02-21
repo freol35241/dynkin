@@ -2,6 +2,8 @@
 
 A toolkit for 3D dynamics and kinematics of rigid bodies using the YPR euler angle convention.
 
+[--> DOCS <--](https://freol35241.github.io/dynkin/)
+
 ## General
 
 `dynkin` is a set of tools for handling the dynamics and kinematics of rigid bodies in 3 dimensions (6DOFs). Some features:
