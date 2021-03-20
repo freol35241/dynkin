@@ -54,4 +54,4 @@ jobs:
           sudo pip install -e .
       - name: pytest
         run: |
-          pytest python/tests --verbose
+          pytest python/test --verbose
