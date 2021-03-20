@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - python_wrapper
   pull_request:
     branches:
       - main
@@ -13,7 +14,7 @@ env:
   CPM_SOURCE_CACHE: ${{ github.workspace }}/cpm_modules
 
 jobs:
-  build:
+  c++:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,3 +35,24 @@ jobs:
         run: |
           cd build
           ctest --build-config Debug
+
+  python:
+    runs-on: ubuntu-latest
+    needs: [c++]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: "**/cpm_modules"
+          key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
+
+      - name: scikit-build
+        run: |
+          pip install -r requirements_dev.txt
+          cd python
+          sudo pip install -e .
+      - name: pytest
+        run: |
+          pytest python/tests --verbose

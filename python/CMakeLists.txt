@@ -24,4 +24,5 @@ CPMAddPackage(
 
 pybind11_add_module(${PROJECT_NAME} dynkin.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE dynkin)
-set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "dynkin")
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME _dynkin)
+install(TARGETS ${PROJECT_NAME} DESTINATION .) 
