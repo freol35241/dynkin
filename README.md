@@ -56,20 +56,20 @@ Frame frame1 = create_frame();
 frame1->position() << 1, 2, 3;
 frame1->set_attitude({0,0,90*DEG2RAD});
 
-// Find transformation from the inertial frame to frame1
+// Find the transformation that takes the inertial frame into frame1
 Transform ti1 = transform(nullptr, frame1);
 
 // Transformation of vector
 Eigen::Vector3d v1_decomposed_in_inertial_frame, v1_decomposed_in_frame1;
-v1_decomposed_in_frame1 = ti1.apply_vector(v1_decomposed_in_inertial_frame);
+v1_decomposed_in_inertial_frame = ti1.apply_vector(v1_decomposed_in_frame1);
 
 // Transformation of position
 Eigen::Vector3d p1_decomposed_in_inertial_frame, p1_decomposed_in_frame1;
-p1_decomposed_in_frame1 = ti1.apply_position(p1_decomposed_in_inertial_frame);
+p1_decomposed_in_inertial_frame = ti1.apply_position(p1_decomposed_in_frame1);
 
 // Transformation of wrench
 Eigen::Vector6d w1_decomposed_in_inertial_frame, w1_decomposed_in_frame1;
-w1_decomposed_in_frame1 = ti1.apply_wrench(w1_decomposed_in_inertial_frame);
+w1_decomposed_in_inertial_frame = ti1.apply_wrench(w1_decomposed_in_frame1);
 
 // Find the inverse transformation
 Transform t1i = ti1.inverse();
@@ -98,20 +98,20 @@ Frame frame2 = create_frame();
 frame2->position() << 3, 2, 1;
 frame2->set_attitude({0,0,-90*DEG2RAD});
 
-// Find transformation from frame1 to frame2
+// Find transformation taking frame1 into frame2
 Transform t12 = transform(frame1, frame2);
 
 // Transformation of vector
 Eigen::Vector3d v1_decomposed_in_frame1, v1_decomposed_in_frame2;
-v1_decomposed_in_frame2 = t12.apply_vector(v1_decomposed_in_frame1);
+v1_decomposed_in_frame1 = t12.apply_vector(v1_decomposed_in_frame2);
 
 // Transformation of position
 Eigen::Vector3d p1_decomposed_in_frame1, p1_decomposed_in_frame2;
-p1_decomposed_in_frame2 = t12.apply_position(p1_decomposed_in_frame1);
+p1_decomposed_in_frame1 = t12.apply_position(p1_decomposed_in_frame2);
 
 // Transformation of wrench
 Eigen::Vector6d w1_decomposed_in_frame1, w1_decomposed_in_frame2;
-w1_decomposed_in_frame2 = t12.apply_wrench(w1_decomposed_in_frame1);
+w1_decomposed_in_frame1 = t12.apply_wrench(w1_decomposed_in_frame2);
 
 // Find the inverse transformation
 Transform t21 = t12.inverse();
@@ -138,10 +138,10 @@ Frame frame3 = frame2->create_child();
 frame3->position() << 1, 1, 1;
 
 
-// Find transformation from inertial frame to frame3
+// Find transformation taking the inertial frame into frame3
 Transform ti3 = transform(None, frame3);
 
-// Transformation from frame3 and frame1
+// Find transformation taking frame3 into frame1
 Transform t31 = transform(frame3, frame1);
 
 ...
