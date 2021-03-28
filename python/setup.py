@@ -22,7 +22,7 @@ setup(
     description = ("""A toolkit for 3D dynamics and kinematics"""),
     url = "https://github.com/freol35241/dynkin",
     packages=['dynkin'],
-    long_description=read('README.md'),
+    long_description=read('../README.md'),
     long_description_content_type="text/markdown",
     license='MIT',
     python_requires='>=3.5',
