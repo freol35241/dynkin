@@ -47,11 +47,16 @@ jobs:
           path: "**/cpm_modules"
           key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
 
+      - name: "Set up Python 3"
+        uses: actions/setup-python@v2
+        with: 
+          python-version: '3.x'
+
       - name: scikit-build
         run: |
           pip install -r requirements_dev.txt
           cd python
-          sudo pip install -e .
+          pip install -e .
       - name: pytest
         run: |
           pytest python/test --verbose
