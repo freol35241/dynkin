@@ -2,4 +2,9 @@ jinja2
 Pygments
 pytest
 build
+sphinx
+sphinx-rtd-theme
+breathe
+exhale
+m2r2
 -r python/requirements.txt
