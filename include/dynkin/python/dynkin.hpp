@@ -10,8 +10,6 @@ using namespace pybind11::literals;
 using namespace dynkin;
 using namespace dynkin::rigidbody;
 
-typedef Eigen::Matrix<double,6,6,Eigen::RowMajor> RowMatrix6d;
-
 namespace dynkin{
     namespace python{
 
@@ -119,33 +117,12 @@ namespace dynkin{
                 .def_readonly("CoG", &RigidBody::CoG)
                 .def("generalized_coordinates", &RigidBody::generalized_coordinates)
                 .def("generalized_velocities", &RigidBody::generalized_velocities)
-                .def("acceleration",
-                    [](
-                        RigidBody& self,
-                        const Eigen::Vector6d& wrench,
-                        const RowMatrix6d& additional_inertia
-                    ){
-                        return self.acceleration(
-                            wrench,
-                            additional_inertia.transpose()
-                        );
-                    },
+                .def("acceleration", &RigidBody::acceleration,
                     "wrench"_a,
-                    "additional_inertia"_a = RowMatrix6d::Zero()
-                )
-                .def("wrench",
-                    [](
-                        RigidBody& self,
-                        const Eigen::Vector6d& acceleration,
-                        const RowMatrix6d& additional_inertia
-                    ){
-                        return self.wrench(
-                            acceleration,
-                            additional_inertia.transpose()
-                        );
-                    },
+                    "additional_inertia"_a = Eigen::Matrix6d::Zero())
+                .def("wrench", &RigidBody::wrench,
                     "acceleration"_a,
-                    "additional_inertia"_a = RowMatrix6d::Zero()
+                    "additional_inertia"_a = Eigen::Matrix6d::Zero()
                 );
         }
 
