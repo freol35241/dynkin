@@ -1,2 +1,5 @@
 jinja2
 Pygments
+pytest
+build
+-r python/requirements.txt

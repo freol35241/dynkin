@@ -307,7 +307,7 @@ namespace dynkin {
          * @param gyradii Rigid body gyradii (3x1)
          * @return Generalized Inertia Matrix (6x6)
          */
-        Eigen::Matrix6d generalized_inertia_matrix(const double& mass, const Eigen::Vector3d& gyradii){
+        inline Eigen::Matrix6d generalized_inertia_matrix(const double& mass, const Eigen::Vector3d& gyradii){
             if (mass <= 0.0){
                 throw std::invalid_argument("mass must be greater than zero!");
             }

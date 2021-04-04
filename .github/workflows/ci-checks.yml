@@ -13,7 +13,7 @@ env:
   CPM_SOURCE_CACHE: ${{ github.workspace }}/cpm_modules
 
 jobs:
-  build:
+  cpp:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,3 +34,29 @@ jobs:
         run: |
           cd build
           ctest --build-config Debug
+
+  python:
+    runs-on: ubuntu-latest
+    needs: [cpp]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: "**/cpm_modules"
+          key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
+
+      - name: "Set up Python 3"
+        uses: actions/setup-python@v2
+        with: 
+          python-version: '3.x'
+
+      - name: scikit-build
+        run: |
+          pip install -r requirements_dev.txt
+          cd python
+          pip install -e .
+      - name: pytest
+        run: |
+          pytest python/test --verbose

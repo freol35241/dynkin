@@ -1,8 +1,6 @@
 # dynkin
 
-A toolkit for 3D dynamics and kinematics of rigid bodies using the YPR euler angle convention.
-
-[--> DOCS <--](https://freol35241.github.io/dynkin/)
+A toolkit for 3D dynamics and kinematics of rigid bodies using the YPR euler angle convention. Written in C++ as a single-file, header-only library based on the Eigen vector library. Python bindings are built using pybind11 and available on PyPi.
 
 ## General
 
@@ -15,7 +13,7 @@ A toolkit for 3D dynamics and kinematics of rigid bodies using the YPR euler ang
 The fundamentals of reference frames and the kinematic relations of these are based on [Theory of Applied Robotics (Reza N. Jazar)](https://link.springer.com/book/10.1007/978-0-387-68964-7) , the idealized rigid body implementation follows the outline suggested in the lectures by [Fossen](https://www.fossen.biz/wiley/ed2/Ch3.pdf).
 
 
-## Theory intro
+### Theory intro
 
 Some basic notions:
 
@@ -26,7 +24,9 @@ Some basic notions:
 * A `transform` is an object relating two `Frame`s enabling transformation of `positions`, `vectors`, `velocities` etc from one `Frame` to the other. The `Frame`s do not need to be part of the same `kinematic chain`.
 * A `RigidBody` is a 3D body with arbitrary extent that may be described by a generalized inertia matrix (6x6). It accelerates when subject to generalized external forces (`wrenches`) and rotational velocities give rise to inertial forces (coriolis and centripetal contributions).
 
-### Installation
+## Installation
+
+### C++
 
 `dynkin` can be included as per below in your cmake workflow if using the [CPM.cmake package manager](https://github.com/TheLartians/CPM.cmake):
 
@@ -40,7 +40,17 @@ CPMAddPackage(
 
 Or, since `dynkin` is a single-file and header-only file library, just copy ```dynkin.hpp``` into your project.
 
-### Examples
+### Python
+
+Available on PyPi:
+
+```
+pip install dynkin
+```
+
+## Examples
+
+### C++
 
 **Single frame**
 
@@ -56,20 +66,20 @@ Frame frame1 = create_frame();
 frame1->position() << 1, 2, 3;
 frame1->set_attitude({0,0,90*DEG2RAD});
 
-// Find transformation from the inertial frame to frame1
+// Find the transformation that takes the inertial frame into frame1
 Transform ti1 = transform(nullptr, frame1);
 
 // Transformation of vector
 Eigen::Vector3d v1_decomposed_in_inertial_frame, v1_decomposed_in_frame1;
-v1_decomposed_in_frame1 = ti1.apply_vector(v1_decomposed_in_inertial_frame);
+v1_decomposed_in_inertial_frame = ti1.apply_vector(v1_decomposed_in_frame1);
 
 // Transformation of position
 Eigen::Vector3d p1_decomposed_in_inertial_frame, p1_decomposed_in_frame1;
-p1_decomposed_in_frame1 = ti1.apply_position(p1_decomposed_in_inertial_frame);
+p1_decomposed_in_inertial_frame = ti1.apply_position(p1_decomposed_in_frame1);
 
 // Transformation of wrench
 Eigen::Vector6d w1_decomposed_in_inertial_frame, w1_decomposed_in_frame1;
-w1_decomposed_in_frame1 = ti1.apply_wrench(w1_decomposed_in_inertial_frame);
+w1_decomposed_in_inertial_frame = ti1.apply_wrench(w1_decomposed_in_frame1);
 
 // Find the inverse transformation
 Transform t1i = ti1.inverse();
@@ -98,20 +108,20 @@ Frame frame2 = create_frame();
 frame2->position() << 3, 2, 1;
 frame2->set_attitude({0,0,-90*DEG2RAD});
 
-// Find transformation from frame1 to frame2
+// Find transformation taking frame1 into frame2
 Transform t12 = transform(frame1, frame2);
 
 // Transformation of vector
 Eigen::Vector3d v1_decomposed_in_frame1, v1_decomposed_in_frame2;
-v1_decomposed_in_frame2 = t12.apply_vector(v1_decomposed_in_frame1);
+v1_decomposed_in_frame1 = t12.apply_vector(v1_decomposed_in_frame2);
 
 // Transformation of position
 Eigen::Vector3d p1_decomposed_in_frame1, p1_decomposed_in_frame2;
-p1_decomposed_in_frame2 = t12.apply_position(p1_decomposed_in_frame1);
+p1_decomposed_in_frame1 = t12.apply_position(p1_decomposed_in_frame2);
 
 // Transformation of wrench
 Eigen::Vector6d w1_decomposed_in_frame1, w1_decomposed_in_frame2;
-w1_decomposed_in_frame2 = t12.apply_wrench(w1_decomposed_in_frame1);
+w1_decomposed_in_frame1 = t12.apply_wrench(w1_decomposed_in_frame2);
 
 // Find the inverse transformation
 Transform t21 = t12.inverse();
@@ -138,10 +148,10 @@ Frame frame3 = frame2->create_child();
 frame3->position() << 1, 1, 1;
 
 
-// Find transformation from inertial frame to frame3
+// Find transformation taking the inertial frame into frame3
 Transform ti3 = transform(None, frame3);
 
-// Transformation from frame3 and frame1
+// Find transformation taking frame3 into frame1
 Transform t31 = transform(frame3, frame1);
 
 ...
@@ -151,6 +161,95 @@ Transform t31 = transform(frame3, frame1);
 ```c++
 TODO
 ```
+
+### Python
+
+**Single frame**
+```python
+import numpy as np # Not a dependency of dynkin!
+from dynkin import Frame, transform
+
+frame1 = Frame(position=[1, 2, 3], attitude=np.deg2rad([0, 0, 90]))
+
+# Find the transformation that takes the inertial frame into frame1
+ti1 = transform(None, frame1)
+
+# Transformation of vector
+v1_decomposed_in_inertial_frame = ti1.apply_vector(v1_decomposed_in_frame1)
+
+# Transformation of position
+p1_decomposed_in_inertial_frame = ti1.apply_position(p1_decomposed_in_frame1)
+
+# Transformation of wrench
+w1_decomposed_in_inertial_frame = ti1.apply_wrench(w1_decomposed_in_frame1)
+
+# Find the inverse transformation
+t1i = ti1.inv()
+
+# Pose of this frame, decomposed in inertial frame
+frame1.get_pose()
+
+# Twist of this frame, decomposed in inertial frame
+frame.get_twist()
+```
+
+**Two frames**
+```python
+import numpy as np # Not a dependency of dynkin!
+from dynkin import Frame, transform
+
+frame1 = Frame(position=[1, 2, 3], attitude=np.deg2rad([0, 0, 90]))
+frame2 = Frame(position=[3, 2, 1], attitude=np.deg2rad([0, 0, -90]))
+
+# Find transformation taking frame1 into frame2
+t12 = transform(frame1, frame2)
+
+# Transformation of vector
+v1_decomposed_in_frame1 = t12.apply_vector(v1_decomposed_in_frame2)
+
+# Transformation of position
+p1_decomposed_in_frame1 = t12.apply_position(p1_decomposed_in_frame2)
+
+# Transformation of wrench
+w1_decomposed_in_frame1 = t12.apply_wrench(w1_decomposed_in_frame2)
+
+# Find the inverse transformation
+t21 = t12.inv()
+```
+
+**Kinematic chains**
+```python
+import numpy as np # Not a dependency of dynkin!
+from dynkin import Frame, transform
+
+frame1 = Frame(position=[1, 2, 3], attitude=np.deg2rad([0, 0, 90]))
+frame2 = frame1.align_child(position=[3, 2, 1], attitude=np.deg2rad([0, 0, -90]))
+frame3 = frame2.align_child(position=[1, 1, 1], attitude=[0, 0, 0])
+
+# Find transformation taking the inertial frame into frame3
+ti3 = transform(None, frame3)
+
+# Find transformation taking frame3 into frame1
+t31 = transform(frame3, frame1)
+
+...
+```
+
+**Rigid body**
+```python
+TODO
+```
+
+
+## API documentation
+
+### C++
+
+https://freol35241.github.io/dynkin/
+
+### Python
+
+TODO
 
 ## License
 
